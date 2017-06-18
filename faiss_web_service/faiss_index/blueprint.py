@@ -19,7 +19,40 @@ def record(setup_state):
         setup_state.app.config.get('GET_FAISS_RESOURCES'),
         setup_state.app.config['GET_FAISS_INDEX'],
         setup_state.app.config['GET_FAISS_ID_TO_VECTOR'],
-        setup_state.app.config.get('UPDATE_FAISS_AFTER_SECONDS'))
+        setup_state.app.config.get('UPDATE_FAISS_AFTER_SECONDS'),
+        setup_state.app.config.get('PUT_FEATURE_QUEUE'))
+
+
+@blueprint.route('/faiss/index', methods=['POST'])
+def index():
+    try:
+        json = request.get_json(force=True)
+        validate(json, {
+            'type': 'object',
+            'required': ['tenant', 'category', 'id', 'feature'],
+            'properties': {
+                'tenant': {'type': 'string'},
+                'category': {'type', 'string'},
+                'id': {'type': 'integer', 'minimum': 1 }
+                'feature': {
+                    'type': 'array',
+                    'items': {
+                        'type': 'array',
+                        'items': {'type': 'number'}
+                    }
+                }
+            }
+        })
+        blueprint.faiss_index.put_feature_queue(json['tenant'], json['category'], json['id'], json['feature'])
+        return jsonify('ok')
+    except (BadRequest, ValidationError) as e:
+        print('Bad request', e)
+        return 'Bad request', 400
+
+    except Exception as e:
+        print('Server error', e)
+        return 'Server error', 500
+
 
 @blueprint.route('/faiss/search', methods=['POST'])
 def search():
@@ -54,7 +87,7 @@ def search():
         print('Server error', e)
         return 'Server error', 500
 
-def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds):
+def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds, put_feature_queue):
 
     SIGNAL_SET_FAISS_RESOURCES = 1001
     SIGNAL_SET_FAISS_INDEX = 2001
@@ -68,7 +101,7 @@ def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vec
 
     def set_faiss_index(signal = None):
         print('Getting Faiss index')
-        blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector())
+        blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector(), put_feature_queue())
 
         if uwsgi and signal:
             uwsgi.signal(signal + 1)

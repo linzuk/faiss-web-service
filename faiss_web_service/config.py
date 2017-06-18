@@ -9,4 +9,7 @@ def GET_FAISS_INDEX():
 def GET_FAISS_ID_TO_VECTOR():
     raise NotImplementedError
 
+def PUT_FEATURE_QUEUE():
+    raise NotImplementedError
+
 UPDATE_FAISS_AFTER_SECONDS = None

@@ -62,11 +62,18 @@ def GET_FAISS_RESOURCES():
         print 'index finish.\n'
 
 
-def PUT_FEATURE_QUEUE(app, tenant, category, feature_id, feature):
-    cursor = conn.cursor()
-    cursor.execute(''' INSERT INTO FEATURE_QUEUE(APP, TENANT, CATEGORY, FEATURE_ID, FEATURE) VALUES(?, ?, ?, ?, ?) ''',
-                   (app, tenant, category, feature_id, feature))
-    conn.commit()
+def PUT_FEATURE_QUEUE():
+    def put_feature_queue(tenant, category, feature_id, feature):
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                ''' INSERT INTO FEATURE_QUEUE(APP, TENANT, CATEGORY, FEATURE_ID, FEATURE) VALUES(?, ?, ?, ?, ?) ''',
+                ('test_app', tenant, category, feature_id, feature))
+            conn.commit()
+        except Exception, e:
+            print e
+            pass
+    return put_feature_queue
 
 
 def delete_feature(app, tenant, category, feature_id):
@@ -158,16 +165,5 @@ conn = sqlite3.connect(tmp_folder + '/feature_queue.db')
 conn.row_factory = dict_factory
 
 init_table()
-# http post feature
-PUT_FEATURE_QUEUE('test_app', 'test_tenant', 'FABRIC', '987654321', mxb)
-# timed execute index from db to file
-GET_FAISS_RESOURCES()
-# get index
-index = GET_FAISS_INDEX()
-print 'index type', type(index)
-# get feature
-id_to_vector = GET_FAISS_ID_TO_VECTOR()
-vector = id_to_vector(987654321)
-print 'vector type', type(vector)
 
 UPDATE_FAISS_AFTER_SECONDS = 60 * 60  # every hour
