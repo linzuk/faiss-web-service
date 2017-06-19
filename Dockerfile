@@ -11,11 +11,11 @@ COPY requirements.txt /opt/faiss-web-service/requirements.txt
 RUN pip install --upgrade pip && \
     pip install --requirement /opt/faiss-web-service/requirements.txt
 
-COPY . /opt/faiss-web-service
-
 # install sqlite3 for python
 RUN echo "update 2017-06-16"
 RUN apt-get update -y
 RUN apt-get install libsqlite-dev -y
+
+COPY . /opt/faiss-web-service
 
 ENTRYPOINT /opt/faiss-web-service/bin/faiss_web_service.sh
