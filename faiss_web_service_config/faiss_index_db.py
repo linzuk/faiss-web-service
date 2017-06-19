@@ -175,5 +175,6 @@ finally:
     mxb_txt.close()
 
 init_table()
-PUT_FEATURE_QUEUE('test_app', 'test_tenant', 'FABRIC', '987654321', mxb)
+put_feature_queue = PUT_FEATURE_QUEUE()
+put_feature_queue('test_tenant', 'FABRIC', '987654321', mxb)
 UPDATE_FAISS_AFTER_SECONDS = 60 * 60  # every hour
