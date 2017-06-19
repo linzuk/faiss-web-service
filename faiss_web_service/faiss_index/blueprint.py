@@ -13,6 +13,7 @@ except ImportError:
 
 blueprint = Blueprint('faiss_index', __name__)
 
+
 @blueprint.record_once
 def record(setup_state):
     manage_faiss_index(
@@ -33,7 +34,7 @@ def index():
             'properties': {
                 'tenant': {'type': 'string'},
                 'category': {'type', 'string'},
-                'id': {'type': 'integer', 'minimum': 1 }
+                'id': {'type': 'integer', 'minimum': 1},
                 'feature': {
                     'type': 'array',
                     'items': {
@@ -62,20 +63,21 @@ def search():
             'type': 'object',
             'required': ['k'],
             'properties': {
-                'k': { 'type': 'integer', 'minimum': 1 },
-                'ids': { 'type': 'array', 'items': { 'type': 'number' }},
+                'k': {'type': 'integer', 'minimum': 1},
+                'ids': {'type': 'array', 'items': {'type': 'number'}},
                 'vectors': {
                     'type': 'array',
                     'items': {
                         'type': 'array',
-                        'items': { 'type': 'number' }
+                        'items': {'type': 'number'}
                     }
                 }
             }
         })
 
         results_ids = blueprint.faiss_index.search_by_ids(json['ids'], json['k']) if 'ids' in json else []
-        results_vectors = blueprint.faiss_index.search_by_vectors(json['vectors'], json['k']) if 'vectors' in json else []
+        results_vectors = blueprint.faiss_index.search_by_vectors(json['vectors'],
+                                                                  json['k']) if 'vectors' in json else []
 
         return jsonify(results_ids + results_vectors)
 
@@ -87,8 +89,9 @@ def search():
         print('Server error', e)
         return 'Server error', 500
 
-def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds, put_feature_queue):
 
+def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds,
+                       put_feature_queue):
     SIGNAL_SET_FAISS_RESOURCES = 1001
     SIGNAL_SET_FAISS_INDEX = 2001
 
@@ -99,7 +102,7 @@ def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vec
         if uwsgi:
             uwsgi.signal(SIGNAL_SET_FAISS_INDEX)
 
-    def set_faiss_index(signal = None):
+    def set_faiss_index(signal=None):
         print('Getting Faiss index')
         blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector(), put_feature_queue())
 
