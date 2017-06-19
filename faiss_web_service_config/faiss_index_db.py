@@ -45,6 +45,8 @@ def GET_FAISS_ID_TO_VECTOR():
 
 
 def GET_FAISS_RESOURCES():
+    import sys
+    sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
     import faiss_index_db
     features = list_features()
     for i, row in enumerate(features):
