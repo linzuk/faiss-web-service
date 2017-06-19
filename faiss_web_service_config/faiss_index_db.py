@@ -111,7 +111,7 @@ def build_index(app, tenant, category, ids, xb):
 
 def update_index_file(ids, xb, index_file):
     if os.path.exists(index_file):
-        index = faiss.read_index(index_file)
+        index = faiss.read_index(str(index_file))
     else:
         index = faiss.IndexFlatL2(xb.shape[1])  # simple index
     index.train(xb)
