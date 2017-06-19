@@ -45,6 +45,7 @@ def GET_FAISS_ID_TO_VECTOR():
 
 
 def GET_FAISS_RESOURCES():
+    import faiss_index_db
     features = list_features()
     for i, row in enumerate(features):
         app = row['APP']
