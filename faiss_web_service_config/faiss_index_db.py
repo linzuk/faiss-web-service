@@ -22,6 +22,7 @@ def GET_FAISS_INDEX():
     # else:
     #     print "index not found"
     #     return
+    import faiss
     return faiss.read_index(str(dir_all('test_app')))
 
 
@@ -100,7 +101,6 @@ def build_index(app, tenant, category, ids, xb):
 
 
 def update_index_file(ids, xb, index_file):
-    import faiss
     if os.path.exists(index_file):
         index = faiss.read_index(index_file)
     else:
