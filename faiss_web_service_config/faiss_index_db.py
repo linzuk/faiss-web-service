@@ -168,7 +168,7 @@ if not os.path.exists(tmp_folder):
 conn = sqlite3.connect(tmp_folder + '/feature_queue.db')
 conn.row_factory = dict_factory
 
-mxb_txt = open('mxb.txt')
+mxb_txt = open('/opt/faiss-web-service/mxb.txt')
 try:
     mxb = mxb_txt.read()
 finally:
