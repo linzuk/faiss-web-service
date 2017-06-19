@@ -26,10 +26,18 @@ def GET_FAISS_INDEX():
     import sys
     sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
     import faiss_index_db as this_file
+    this_file.init_table()
+
     return faiss.read_index(str(this_file.dir_all('test_app')))
 
 
 def GET_FAISS_ID_TO_VECTOR():
+    import sys
+    sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
+    import faiss_index_db as this_file
+    this_file.init_table()
+    conn = this_file.conn
+
     def id_to_vector(id_):
         try:
             cursor = conn.cursor()
@@ -52,6 +60,8 @@ def GET_FAISS_RESOURCES():
     import sys
     sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
     import faiss_index_db as this_file
+    this_file.init_table()
+
     features = this_file.list_features()
     for i, row in enumerate(features):
         app = row['APP']
@@ -70,6 +80,12 @@ def GET_FAISS_RESOURCES():
 
 
 def PUT_FEATURE_QUEUE():
+    import sys
+    sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
+    import faiss_index_db as this_file
+    this_file.init_table()
+    conn = this_file.conn
+
     def put_feature_queue(tenant, category, feature_id, feature):
         try:
             cursor = conn.cursor()
