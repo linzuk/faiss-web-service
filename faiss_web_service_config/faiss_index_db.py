@@ -168,6 +168,12 @@ if not os.path.exists(tmp_folder):
 conn = sqlite3.connect(tmp_folder + '/feature_queue.db')
 conn.row_factory = dict_factory
 
-init_table()
+mxb_txt = open('mxb.txt')
+try:
+    mxb = mxb_txt.read()
+finally:
+    mxb_txt.close()
 
+init_table()
+PUT_FEATURE_QUEUE('test_app', 'test_tenant', 'FABRIC', '987654321', mxb)
 UPDATE_FAISS_AFTER_SECONDS = 60 * 60  # every hour
