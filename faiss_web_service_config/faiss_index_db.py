@@ -23,7 +23,10 @@ def GET_FAISS_INDEX():
     #     print "index not found"
     #     return
     import faiss
-    return faiss.read_index(str(dir_all('test_app')))
+    import sys
+    sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
+    import faiss_index_db as this_file
+    return faiss.read_index(str(this_file.dir_all('test_app')))
 
 
 def GET_FAISS_ID_TO_VECTOR():
