@@ -60,8 +60,8 @@ def GET_FAISS_RESOURCES():
         ids = np.array(ids).astype('int')
         print '---------------------------------------------- indexing...'
         print '%s %s %s' % (app, tenant, category)
-        build_index(app, tenant, category, ids, xb)
-        delete_feature(app, tenant, category, feature_id)
+        this_file.build_index(app, tenant, category, ids, xb)
+        this_file.delete_feature(app, tenant, category, feature_id)
         print 'index finish.\n'
 
 
