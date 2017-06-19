@@ -150,13 +150,6 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-
-mxb_txt = open('mxb.txt')
-try:
-    mxb = mxb_txt.read()
-finally:
-    mxb_txt.close()
-
 # init
 tmp_folder = "/opt/faiss-web-service/my_index_files"
 if not os.path.exists(tmp_folder):
