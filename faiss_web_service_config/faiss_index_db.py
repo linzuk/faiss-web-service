@@ -100,6 +100,7 @@ def build_index(app, tenant, category, ids, xb):
 
 
 def update_index_file(ids, xb, index_file):
+    import faiss
     if os.path.exists(index_file):
         index = faiss.read_index(index_file)
     else:
