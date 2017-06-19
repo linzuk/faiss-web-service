@@ -53,6 +53,8 @@ def GET_FAISS_ID_TO_VECTOR():
 
 
 def GET_FAISS_RESOURCES():
+    import numpy as np
+    import json
     import sys
     sys.path.append('/opt/faiss-web-service/faiss_web_service_config')
     import faiss_index_db as this_file
